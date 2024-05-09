@@ -4,7 +4,9 @@ import { JwtService } from "@nestjs/jwt";
 @Injectable()
 export class UsersService {
   constructor(private jwtService: JwtService) {}
-  getUser(userId: string) {
+  getUser(userId: string, user: { sub: number; type: string }) {
+    if (user.type === "admin" || String(user.sub) !== userId)
+      throw new UnauthorizedException();
     return users.find((user) => String(user.id) === userId);
   }
 

@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Post, Body, Patch } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Patch,
+  Request,
+} from "@nestjs/common";
 import { UsersService } from "./users.service";
 
 @Controller("users")
@@ -24,7 +32,10 @@ export class UsersController {
 
   // Token requis
   @Get(":userId")
-  getUser(@Param("userId") userId: string) {
-    return this.usersService.getUser(userId);
+  getUser(
+    @Request() req: Request & { user?: { sub: number; type: string } },
+    @Param("userId") userId: string,
+  ) {
+    return this.usersService.getUser(userId, req.user);
   }
 }
